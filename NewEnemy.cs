@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-    // Edit movement pattern and spawn time
+
         transform.Translate(new Vector3(0, -1, 0) * Time.deltaTime * 3f);
         if (transform.position.y < -6.5f)
         {
