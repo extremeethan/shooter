@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject playerPrefab;
     public GameObject enemyOnePrefab;
+    public GameObject enemyTwoPrefab;
     public GameObject cloudPrefab;
 
     public TextMeshProUGUI livesText;
@@ -26,7 +27,8 @@ public class GameManager : MonoBehaviour
         score = 0;
         Instantiate(playerPrefab, transform.position, Quaternion.identity);
         CreateSky();
-        InvokeRepeating("CreateEnemy", 1, 3);
+        InvokeRepeating("CreateEnemyOne", 1, 3);
+        InvokeRepeating("CreateEnemyTwo", 5, 9);
     }
 
     // Update is called once per frame
@@ -40,6 +42,11 @@ public class GameManager : MonoBehaviour
         Instantiate(enemyOnePrefab, new Vector3(Random.Range(-horizontalScreenSize, horizontalScreenSize) * 0.9f, verticalScreenSize, 0), Quaternion.Euler(180, 0, 0));
     }
 
+     void CreateEnemyTwo()
+    {
+        Instantiate(enemyTwoPrefab, new Vector3(-9f, Random.Range(5f, 1f), 0), Quaternion.identity);
+    }
+    
     void CreateSky()
     {
         for (int i = 0; i < 30; i++)
