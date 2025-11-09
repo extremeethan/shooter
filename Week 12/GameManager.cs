@@ -1,67 +1,80 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-
     public GameObject playerPrefab;
     public GameObject enemyOnePrefab;
-    public GameObject enemyTwoPrefab;
     public GameObject cloudPrefab;
 
     public TextMeshProUGUI livesText;
+
+    [SerializeField] private TextMeshProUGUI scoreText; // ← assign in Inspector if you can
 
     public float horizontalScreenSize;
     public float verticalScreenSize;
 
     public int score;
 
-    // Start is called before the first frame update
+    void Awake()
+    {
+        // Fallback: auto-find a UI object named "ScoreText" if not assigned
+        if (scoreText == null)
+        {
+            GameObject go = GameObject.Find("ScoreText");
+            if (go != null) scoreText = go.GetComponent<TextMeshProUGUI>();
+        }
+    }
+
     void Start()
     {
         horizontalScreenSize = 10f;
         verticalScreenSize = 6.5f;
         score = 0;
+
         Instantiate(playerPrefab, transform.position, Quaternion.identity);
         CreateSky();
-        InvokeRepeating("CreateEnemyOne", 1, 3);
-        InvokeRepeating("CreateEnemyTwo", 5, 9);
-    }
+        InvokeRepeating(nameof(CreateEnemy), 1f, 3f);
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        UpdateScoreText(); // show initial score
     }
 
     void CreateEnemy()
     {
-        Instantiate(enemyOnePrefab, new Vector3(Random.Range(-horizontalScreenSize, horizontalScreenSize) * 0.9f, verticalScreenSize, 0), Quaternion.Euler(180, 0, 0));
+        Instantiate(
+            enemyOnePrefab,
+            new Vector3(Random.Range(-horizontalScreenSize, horizontalScreenSize) * 0.9f, verticalScreenSize, 0),
+            Quaternion.Euler(180, 0, 0)
+        );
     }
 
-     void CreateEnemyTwo()
-    {
-        Instantiate(enemyTwoPrefab, new Vector3(-9f, Random.Range(5f, 1f), 0), Quaternion.identity);
-    }
-    
     void CreateSky()
     {
         for (int i = 0; i < 30; i++)
         {
-            Instantiate(cloudPrefab, new Vector3(Random.Range(-horizontalScreenSize, horizontalScreenSize), Random.Range(-verticalScreenSize, verticalScreenSize), 0), Quaternion.identity);
+            Instantiate(
+                cloudPrefab,
+                new Vector3(Random.Range(-horizontalScreenSize, horizontalScreenSize),
+                            Random.Range(-verticalScreenSize, verticalScreenSize), 0),
+                Quaternion.identity
+            );
         }
-        
-    }
-    public void AddScore(int earnedScore)
-    {
-        score = score + earnedScore;
     }
 
-    public void ChangeLivesText (int currentLives)
+    public void AddScore(int earnedScore)
     {
-        livesText.text = "Lives: " + currentLives;
+        score += earnedScore;
+        UpdateScoreText();
+    }
+
+    public void ChangeLivesText(int currentLives)
+    {
+        if (livesText != null) livesText.text = "Lives: " + currentLives;
+    }
+
+    private void UpdateScoreText()
+    {
+        if (scoreText != null) scoreText.text = "Score: " + score;
+        else Debug.LogError("GameManager: scoreText is not assigned and no 'ScoreText' object was found in the scene.");
     }
 }
