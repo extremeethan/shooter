@@ -34,7 +34,8 @@ public class GameManager : MonoBehaviour
 
         Instantiate(playerPrefab, transform.position, Quaternion.identity);
         CreateSky();
-        InvokeRepeating(nameof(CreateEnemy), 1f, 3f);
+        InvokeRepeating("CreateEnemy", 1f, 3f);
+        InvokeRepeating("CreateCoin", 5f, 9f);
 
         UpdateScoreText(); // show initial score
     }
@@ -59,6 +60,11 @@ public class GameManager : MonoBehaviour
                 Quaternion.identity
             );
         }
+    }
+
+    void CreateCoin()
+    {
+        Instantiate(coinPrefab, new Vector3(Random.Range(-horizontalScreenSize, horizontalScreenSize), Random.Range(-verticalScreenSize, verticalScreenSize), 0), Quaternion.identity);
     }
 
     public void AddScore(int earnedScore)
