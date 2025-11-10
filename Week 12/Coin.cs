@@ -7,7 +7,6 @@ public class Coin : MonoBehaviour
 
   public GameObject coinPrefab;
   private GameManager gameManager;
-  private float movementSpeed = 1f;
 
   // Start is called before the first frame update
   void Start()
