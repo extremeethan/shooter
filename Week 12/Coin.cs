@@ -6,8 +6,8 @@ public class Coin : MonoBehaviour
 {
 
   public GameObject coinPrefab;
-
   private GameManager gameManager;
+  private float movementSpeed = 1f;
 
   // Start is called before the first frame update
   void Start()
@@ -20,7 +20,7 @@ public class Coin : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-
+    
   }
 
   private void OnTriggerEnter2D(Collider2D whatDidIHit)
