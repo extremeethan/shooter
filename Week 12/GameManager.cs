@@ -1,4 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class GameManager : MonoBehaviour
@@ -40,25 +43,22 @@ public class GameManager : MonoBehaviour
         UpdateScoreText(); // show initial score
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+    
     void CreateEnemy()
     {
-        Instantiate(
-            enemyOnePrefab,
-            new Vector3(Random.Range(-horizontalScreenSize, horizontalScreenSize) * 0.9f, verticalScreenSize, 0),
-            Quaternion.Euler(180, 0, 0)
-        );
+        Instantiate(enemyOnePrefab, new Vector3(Random.Range(-horizontalScreenSize, horizontalScreenSize) * 0.9f, verticalScreenSize, 0), Quaternion.Euler(180, 0, 0));
     }
 
     void CreateSky()
     {
         for (int i = 0; i < 30; i++)
         {
-            Instantiate(
-                cloudPrefab,
-                new Vector3(Random.Range(-horizontalScreenSize, horizontalScreenSize),
-                            Random.Range(-verticalScreenSize, verticalScreenSize), 0),
-                Quaternion.identity
-            );
+            Instantiate(cloudPrefab, new Vector3(Random.Range(-horizontalScreenSize, horizontalScreenSize), Random.Range(-verticalScreenSize, verticalScreenSize), 0), Quaternion.identity);
         }
     }
 
@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
         UpdateScoreText();
     }
 
-    public void ChangeLivesText(int currentLives)
+    public void ChangeLivesText (int currentLives)
     {
         if (livesText != null) livesText.text = "Lives: " + currentLives;
     }
