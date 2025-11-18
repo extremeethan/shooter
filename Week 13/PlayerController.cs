@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     public GameObject thrusterPrefab;
     public GameObject shieldPrefab;
 
+    private GameObject activeShield;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,17 +40,22 @@ public class PlayerController : MonoBehaviour
 
     public void LoseALife()
     {
-        //Do I have a shield? If yes: do not lose a life, but instead deactivate the shield's visibility
-        //If not: lose a life
-        //lives = lives - 1;
-        //lives -= 1;
-        lives--;
-        gameManager.ChangeLivesText(lives);
-        if (lives == 0)
+        if (activeShield != null)
         {
-            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-            gameManager.GameOver();
-            Destroy(this.gameObject);
+            Destroy(activeShield);
+            activeShield = null;
+
+        }
+        else
+        {
+            lives--;
+            gameManager.ChangeLivesText(lives);
+            if (lives == 0)
+            {
+                Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+                gameManager.GameOver();
+                Destroy(this.gameObject);
+            }
         }
     }
 
@@ -68,6 +75,20 @@ public class PlayerController : MonoBehaviour
         gameManager.ManagePowerupText(0);
         gameManager.PlaySound(2);
     }
+
+    IEnumerator ShieldPowerDown()
+    {
+        yield return new WaitForSeconds(3f);
+
+        if (activeShield != null)
+        {
+            Destroy(activeShield);
+            activeShield = null;
+            gameManager.ManagePowerupText(0);
+            gameManager.PlaySound(2);
+        }
+    }
+
 
     private void OnTriggerEnter2D(Collider2D whatDidIHit)
     {
@@ -96,10 +117,15 @@ public class PlayerController : MonoBehaviour
                     gameManager.ManagePowerupText(3);
                     break;
                 case 4:
-                    //Picked up shield
-                    //Do I already have a shield?
-                    //If yes: do nothing
-                    //If not: activate the shield's visibility
+                    if (activeShield == null)
+                    {
+                        activeShield = Instantiate(shieldPrefab, transform.position, Quaternion.identity);
+                        activeShield.transform.SetParent(transform);
+                        activeShield.transform.localPosition = new Vector3(-0.15f,0,0);
+                        activeShield.SetActive(true);
+                    }    
+                    StartCoroutine(ShieldPowerDown());
+                    gameManager.PlaySound(4);
                     gameManager.ManagePowerupText(4);
                     break;
             }
