@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public AudioClip powerupSound;
     public AudioClip powerdownSound;
     public AudioClip coinSound;
+    public AudioClip gainlifeSound;
 
     public TextMeshProUGUI livesText;
     public TextMeshProUGUI scoreText;
@@ -133,6 +134,9 @@ public class GameManager : MonoBehaviour
                 break;
             case 3:
                 audioPlayer.GetComponent<AudioSource>().PlayOneShot(coinSound);
+                break;
+            case 4:
+                audioPlayer.GetComponent<AudioSource>().PlayOneShot(gainlifeSound);
                 break;
         }
     }
